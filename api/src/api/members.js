@@ -192,4 +192,22 @@ router.put(
   }),
 );
 
+// Gets all members associated with a given chapter
+router.get(
+  '/chapter/:chapter',
+  requireRegistered,
+  errorWrap(async (req, res) => {
+    if (!Object.keys(Member.chapterEnum).includes(req.params.chapter)) {
+      return res.status(404).json({
+        success: false,
+        message: req.params.chapter + ' is not a valid chapter.',
+      });
+    }
+    res.json({
+      success: true,
+      result: Member.find({ chapter: Member.chapterEnum[req.params.chapter] }),
+    });
+  }),
+);
+
 module.exports = router;
